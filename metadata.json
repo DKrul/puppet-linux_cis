@@ -1,6 +1,6 @@
  {
       "name": "puppet-linux_cis",
-      "version": "1.0.7",
+      "version": "1.0.8",
       "author": "ConclusionMC",
       "license": "Apache-2.0",
       "summary": "CIS Benchmark Compliance for RHEL 7",
@@ -21,6 +21,5 @@
       "dependencies": [
         { "name": "puppetlabs/stdlib", "version_requirement": ">= 2.2.0 < 5.0.0" },
         { "name": "herculesteam-augeasproviders_pam", "version_requirement": ">= 2.1.0 < 5.0.0" }
-      ],
-      "data_provider": "hiera"
+      ]
     }

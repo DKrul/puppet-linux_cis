@@ -1,6 +1,4 @@
-class cis_rhel7::rule::rule_4_1(
-$rules = $::cis_rhel7::params::audit_rules
-) {
+# == Class: cis_rhel7::rule::rule_4_1
 # includes Rules:
 #4.1.1.1 Ensure audit log storage size is configured 
 #4.1.1.2 Ensure system is disabled when audit logs are full 
@@ -23,86 +21,77 @@ $rules = $::cis_rhel7::params::audit_rules
 #4.1.17 Ensure kernel module loading and unloading is collected 
 #4.1.18 Ensure the audit configuration is immutable 
 
-$auditfile = '/etc/audit/auditd.conf'
-$auditrules = '/etc/audit/audit.rules'
-$grubfile = '/etc/default/grub'
+class cis_rhel7::rule::rule_4_1(
+  $rules = $::cis_rhel7::params::audit_rules
+) {
+  $auditfile = '/etc/audit/auditd.conf'
+  $auditrules = '/etc/audit/audit.rules'
+  $grubfile = '/etc/default/grub'
 
-#4.1.1.1 Ensure audit log storage size is configured 
-file_line { "(4.1.1.1) - ${file}: max_log_file":
-  ensure    => present,
-  path      => $auditfile,
-  line      => 'max_log_file = 32',
-  match     => '^max_log_file(?!_)',
-}
-
-file_line { "(4.1.1.2) - ${file}: admin_space_left_action":
-  ensure    => present,
-  path      => $auditfile,
-  line      => 'admin_space_left_action = halt',
-  match     => '^admin_space_left_action',
-}
-file_line { "(4.1.1.2) - ${file}: action_mail_acct":
-  ensure    => present,
-  path      => $auditfile,
-  line      => 'action_mail_acct = root',
-  match     => '^action_mail_acct',
-}
-file_line { "(4.1.1.2) - ${file}: max_log_file_action":
-  ensure    => present,
-  path      => $auditfile,
-  line      => 'max_log_file_action = keep_logs',
-  match     => '^max_log_file_action',
-}
-
-file_line { "(4.1.1.3) - ${file}: max_log_file_action":
-  ensure    => present,
-  path      => $auditfile,
-  line      => 'max_log_file_action = keep_logs',
-  match     => '^max_log_file_action',
-}
-
-file_line { "(4.1.1.3) - ${file}: space_left_action":
-  ensure    => present,
-  path      => $auditfile,
-  line      => 'space_left_action = email',
-  match     => '^space_left_action',
-}
-
-
-service { "(4.1.2) - auditd service enabled":
-  name    => "auditd",
-  ensure  => running,
-  enable  => true,
-}
-
-#4.1.3
-file { "(4.1.3) - ${grubfile} exists":
-  name    => $grubfile,
-  ensure  => file,
-  mode    => '0644',
-  owner   => 'root',
-  group   => 'root',
-}
-
-file_line { "(4.1.3) - ${grubfile}: audit=1":
-  ensure    => present,
-  path      => $grubfile,
-  line      => 'GRUB_CMDLINE_LINUX="nofb splash=quiet crashkernel=auto rd.lvm.lv=VolGroup01/root rhgb quiet audit=1"',
-  match     => '^GRUB_CMDLINE_LINUX',
-}
-
-#4.1.4 t/m 4.1.18
-each ($rules) |$rule_item| {
-
-  $rule = split($rule_item, '%')
-
-  file_line { "(${rule[1]}) - ${auditrules}: ${rule[0]}":
-    ensure    => present,
-    path      => $auditrules,
-    line      => $rule[0],
-    multiple  => false,
+  #4.1.1.1 Ensure audit log storage size is configured 
+  file_line { "(4.1.1.1) - ${auditfile}: max_log_file":
+    ensure => present,
+    path   => $auditfile,
+    line   => 'max_log_file = 32',
+    match  => '^max_log_file(?!_)',
+  }
+  file_line { "(4.1.1.2) - ${auditfile}: admin_space_left_action":
+    ensure => present,
+    path   => $auditfile,
+    line   => 'admin_space_left_action = halt',
+    match  => '^admin_space_left_action',
+  }
+  file_line { "(4.1.1.2) - ${auditfile}: action_mail_acct":
+    ensure => present,
+    path   => $auditfile,
+    line   => 'action_mail_acct = root',
+    match  => '^action_mail_acct',
+  }
+  file_line { "(4.1.1.2) - ${auditfile}: max_log_file_action":
+    ensure => present,
+    path   => $auditfile,
+    line   => 'max_log_file_action = keep_logs',
+    match  => '^max_log_file_action',
+  }
+  file_line { "(4.1.1.3) - ${auditfile}: max_log_file_action":
+    ensure => present,
+    path   => $auditfile,
+    line   => 'max_log_file_action = keep_logs',
+    match  => '^max_log_file_action',
+  }
+  file_line { "(4.1.1.3) - ${auditfile}: space_left_action":
+    ensure => present,
+    path   => $auditfile,
+    line   => 'space_left_action = email',
+    match  => '^space_left_action',
+  }
+  service { '(4.1.2) - auditd service enabled':
+    ensure => running,
+    name   => 'auditd',
+    enable => true,
+  }
+  #4.1.3
+  file { "(4.1.3) - ${grubfile} exists":
+    ensure => file,
+    name   => $grubfile,
+    mode   => '0644',
+    owner  => 'root',
+    group  => 'root',
+  }
+  file_line { "(4.1.3) - ${grubfile}: audit=1":
+    ensure => present,
+    path   => $grubfile,
+    line   => 'GRUB_CMDLINE_LINUX="nofb splash=quiet crashkernel=auto rd.lvm.lv=VolGroup01/root rhgb quiet audit=1"',
+    match  => '^GRUB_CMDLINE_LINUX',
+  }
+  #4.1.4 t/m 4.1.18
+  each ($rules) |$rule_item| {
+    $rule = split($rule_item, '%')
+    file_line { "(${rule[1]}) - ${auditrules}: ${rule[0]}":
+      ensure   => present,
+      path     => $auditrules,
+      line     => $rule[0],
+      multiple => false,
+    }
   }
 }
-
-} #EOF
-

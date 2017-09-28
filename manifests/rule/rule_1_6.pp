@@ -1,4 +1,4 @@
-class cis_rhel7::rule::rule_1_6 {
+# == Class: cis_rhel7::rule::rule_1_6
 # includes Rules:
 #1.6.1 Configure SELinux
 #1.6.1.1 Ensure SELinux is not disabled in bootloader configuration 
@@ -8,8 +8,9 @@ class cis_rhel7::rule::rule_1_6 {
 #1.6.1.5 Ensure the MCS Translation Service (mcstrans) is not installed 
 #1.6.1.6 Ensure no unconfined daemons exist (Scored)
 #1.6.2 Ensure SELinux is installed
-
 #NOT USED; enforced from the base profile.
-notify {"NOT USED 1.6.1 Configure SELinux": loglevel => "debug"}
-notify {"NOT USED 1.6.2 Ensure SELinux is installed": loglevel => "debug"}
+
+class cis_rhel7::rule::rule_1_6 {
+#  notify {"NOT USED 1.6.1 Configure SELinux": loglevel => "debug"}
+#  notify {"NOT USED 1.6.2 Ensure SELinux is installed": loglevel => "debug"}
 }
